@@ -1,0 +1,41 @@
+#!/bin/sh
+
+# awscli-install: Install the aws cli locally (no sudo).
+
+if ! command -v unzip >/dev/null 2>&1 ; then
+	echo "Error: unzip is required for install."
+	exit 1
+fi
+
+if command -v aws >/dev/null 2>&1 ; then
+	echo "Error: The aws cli appears to be installed."
+	echo "Info: Getting the version."
+	aws --version
+	exit 1
+fi
+
+# Get the files in a tmp directory.
+tmpdir="$(mktemp -d)"
+cd ${tmpdir}
+
+if [ ! -e awscliv2.zip ]; then
+	echo "Info: Getting the awscliv2 zip file."
+	curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+fi
+
+echo "Info: Unzipping the archive."
+unzip -q awscliv2.zip
+
+echo "Info: Running the aws install script."
+./aws/install -i ~/.local/aws-cli -b ~/.local/bin
+
+echo "Info: Getting the version."
+aws --version
+
+echo "Info: Cleaning up."
+cd ${HOME}
+rm -rf ${tmpdir}
+
+echo "Done!"
+exit 0
+

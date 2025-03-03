@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# awscli-remove: Remove the locally installed aws cli.
+
+# Deleting the installation and symlinks.
+
+echo "Info: Removing the installation."
+rm -rf ${HOME}/.local/aws-cli
+
+echo "Info: Removing the symlinks."
+rm -f ${HOME}/.local/bin/aws
+rm -f ${HOME}/.local/bin/aws_completer
+
+echo "Done!"
